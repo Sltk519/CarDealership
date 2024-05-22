@@ -1,0 +1,113 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="my-6 mx-3 grid grid-cols-5 gap-6">
+    <div class="col-span-2">
+        <div>
+            <img src="{{ car1.image.url }}" class="rounded-xl h-2/3 w-full">
+        </div>
+        <div class="col-span-2 rounded-xl bg-gray-100">
+            <h1 class="text-4xl px-6 font-bold text-gray-900 mt-8">{{ car1.brand }}</h1>
+            <p class="text-sm px-6 pb-4 border-b border-gray-700 text-gray-700 my-4">Модель: {{ car1.model }}</p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Цвет: {{ car1.detail.color }}</p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Тип двигателя: {{ car1.detail.engine_type }}</p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Объем двигателя:
+                {{ car1.detail.engine_capacity}}</p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Пробег: {{ car1.detail.mileage }}</p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Коробка передач: {{ car1.detail.gearbox_type }}
+            </p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Количество дверей:
+                {{ car1.detail.number_of_doors }}</p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Мощность: {{ car1.detail.power }}</p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Максимальная скорость:
+                {{ car1.detail.top_speed }}</p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Разгон: {{ car1.detail.acceleration }}</p>
+            <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Расход топлива:
+                {{ car1.detail.fuel_consumption }}</p>
+            {% if car1.description %}
+            <p class="text-gray-500 pl-6">{{ car1.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-span-3 flex flex-col">
+        <div class="carousel relative w-full overflow-hidden">
+            <div class="carousel-inner flex transition-transform duration-500 ease-in-out">
+                {% for car in cars %}
+                <div class="carousel-item flex-shrink-0 w-full">
+                    <div class="p-4">
+                        <img src="{{ car.image.url }}" class="rounded-xl md:h-96 w-full object-cover">
+                    </div>
+                    <div class="col-span-2 rounded-xl bg-gray-100 p-4">
+                        <h1 class="text-4xl px-6 font-bold text-gray-900 mt-8">{{ car.brand }}</h1>
+                        <p class="text-sm px-6 pb-4 border-b border-gray-700 text-gray-700 my-4">Модель: {{ car.model }}
+                        </p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Цвет: {{ car.detail.color }}</p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Тип двигателя:
+                            {{ car.detail.engine_type }}</p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Объем двигателя:
+                            {{car.detail.engine_capacity }}</p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Пробег: {{ car.detail.mileage }}</p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Коробка передач:
+                            {{car.detail.gearbox_type }}</p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Количество дверей:
+                            {{ car.detail.number_of_doors }}</p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Мощность: {{ car.detail.power }}</p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Максимальная скорость:
+                            {{ car.detail.top_speed }}</p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Разгон:
+                            {{ car.detail.acceleration }}</p>
+                        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Расход топлива:
+                            {{ car.detail.fuel_consumption }}</p>
+                        {% if car.description %}
+                        <p class="text-gray-500 pl-6">{{ car.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Carousel controls -->
+            <button
+                class="carousel-control-prev absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
+                onclick="prevSlide()">
+                &#10094;
+            </button>
+            <button
+                class="carousel-control-next absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
+                onclick="nextSlide()">
+                &#10095;
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Add the necessary Tailwind CSS and JavaScript -->
+<script>
+    let currentIndex = 0;
+
+    function showSlide(index) {
+        const items = document.querySelectorAll('.carousel-item');
+        if (index >= items.length) {
+            currentIndex = 0;
+        } else if (index < 0) {
+            currentIndex = items.length - 1;
+        } else {
+            currentIndex = index;
+        }
+
+        const inner = document.querySelector('.carousel-inner');
+        inner.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    function nextSlide() {
+        showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentIndex - 1);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showSlide(currentIndex);
+    });
+</script>
+
+{% endblock %}

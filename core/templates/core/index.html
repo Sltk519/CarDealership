@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="mt-6 px-6 py-12 bg-gray-200 rounded-xl">
+    <h3 class="text-2xl font-bold text-center mb-8">Новинки</h3>
+    <div class="grid grid-cols-3 gap-3">
+        {% for car in cars %}
+        <div>
+            <a href="{% url 'car:detail' car.id %}" class="hover:shadow-2xl">
+                <div class="">
+                    <img src="{{ car.image.url }}" alt="{{car.image.url }}" class="rounded-t-xl">
+                </div>
+            </a>
+            <div class="p-6 bg-white rounded-b-xl flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl">{{car.brand}} {{car.model}}</h2>
+                    <p class="text-gray-500 font-semibold">Price: ${{car.price}}</p>
+                </div>
+                <div class="flex flex-col">
+                    <!-- <a
+                        href="{% if user.is_authenticated %}{% url 'core:add_to_favourite' car.id %}{% else %}{% url 'core:login' %}{% endif %}">
+                        <i class="bi bi-heart-fill"></i>
+                    </a>
+                    <a href="{% url 'core:remove_from_favorites' car.id  %}"><i class="bi bi-x-circle"></i></a> -->
+                    {% if user.is_authenticated %}
+                    {% if car.id in favorites %}
+                    <a class="text-red-500" href="{% url 'core:remove_from_favorites' car.id %}">
+                        <i class="bi bi-x-circle"></i>
+
+                    </a>
+                    {% else %}
+                    <!-- If the car is not in the user's favorites, show the add button -->
+                    <a class="text-red-500" href="{% url 'core:add_to_favourite' car.id %}">
+                        <i class="bi bi-heart-fill"></i>
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<div class="mt-6 px-6 py-12 bg-gray-200 rounded-xl">
+    <h3 class="text-2xl font-bold text-center mb-8">Категории автомобилей</h3>
+    <div class="grid grid-cols-3 gap-3">
+        {% for category in categories %}
+        <a class="hover:shadow-2xl">
+            <div class="p-6 bg-white rounded-b-xl">
+                <h2 class="text-2xl">{{category.name}}</h2>
+                <p class="text-gray-500">{{ category.car.count }} cars</p>
+
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

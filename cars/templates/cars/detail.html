@@ -1,0 +1,93 @@
+{% extends "core/base.html" %}
+{% block title %}{{car.brand}}{{car.model}}{% endblock %}
+{% block content %}
+
+<div class="my-6 mx-3 grid grid-cols-5 gap-6">
+    <div class="col-span-3 space-y-5">
+        <img src="{{car.image.url }}" class="rounded-xl h-2/3 w-full">
+        <div
+            class="lg:flex lg:flex-row lg:justify-between lg:space-y-0 lg:items-center w-full flex flex-col justify-between items-center space-y-5">
+            <a href="{% url 'car:createreview' car.id %}"
+                class="bg-blue-600 hover:bg-blue-800  text-white font-bold rounded-xl px-5 py-3 text-center w-full lg:w-1/5 ">Оставить
+                отзывь</a>
+            <!-- <button class="bg-blue-600 hover:bg-blue-800 text-white font-bold rounded-xl px-5 py-3">Посмотреть
+                отзыви</button> -->
+            <button class="bg-blue-400 hover:bg-blue-900  text-white font-bold rounded-xl px-5 py-3 w-full lg:w-1/5">
+                Тест-драйв</button>
+            <a href="{% url 'car:order' car.id %}"
+                class="bg-blue-300 hover:bg-blue-700 text-white font-bold rounded-xl px-5 py-3 w-full lg:w-1/5 ">Оставить
+                заяку</a>
+            <a href="{% url 'car:compare' car.id %}"
+                class="p-3 bg-blue-400 hover:bg-blue-700 text-white font-semibold rounded-xl">
+                Сравнить</a>
+        </div>
+    </div>
+    <div class="col-span-2 rounded-xl bg-gray-100">
+        <h1 class="text-4xl px-6 font-bold text-gray-900 mt-8">{{ car.brand }}</h1>
+        <p class="text-sm px-6 pb-4 border-b border-gray-700 text-gray-700 my-4">Модель: {{ car.model }}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Цвет:{{car.detail.color}}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Тип двигателя:{{car.detail.engine_type}}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Объем двигателя:{{car.detail.engine_capacity}}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Цвет:{{car.detail.mileage}}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Цвет:{{car.detail.gearbox_type}}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Количество дверей:{{car.detail.number_of_doors}}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Мощность:{{car.detail.power}}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Максимальная скорость:{{car.detail.top_speed}}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Разгон:{{car.detail.acceleration}}</p>
+        <p class="px-6 text-gray-700 border-b border-gray-700 pb-4">Расход топлива:{{car.detail.fuel_consumption}}</p>
+
+        {% if car.description %}
+        <p class="text-gray-500 pl-6">{{car.description}}</p>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Section for a reviews  -->
+
+<div>
+    <h1 class="ml-5 text-4xl font-bold text-gray-900 mt-8">Отзыви</h1>
+    {% for review in reviews %}
+    <div class="flex flex-col justify-between space-y-5 md:flex-row bg-gray-100 rounded-xl p-6 my-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">{{review.user.username}}</h1>
+            <p class="font-semibold text-gray-500 text-xl">{{review.text}}</p>
+            <p class="font-monospace text-gray-500 text-sm">Created at:{{review.created_at|date:"F d Y H:i"}}</p>
+            {% if review.updated_at != review.created_at %}
+            <p class="font-monospace text-gray-500 text-sm">Updated at:{{review.updated_at|date:"F d Y H:i"}}</p>
+            {% endif %}
+        </div>
+
+        <div>
+            {% if user.is_authenticated and user == review.user %}
+            <a class="bg-blue-600 hover:bg-blue-800 text-white font-bold rounded-xl px-5 py-3"
+                href="{% url 'car:updatereview' review.id %}">Update</a>
+            <a class="bg-red-600 hover:bg-red-900 text-white font-bold rounded-xl px-5 py-3"
+                href="{% url 'car:deletereview' review.id %}">Delete</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<!-- Related cars -->
+<div class="mt-6 px-6 py-12 bg-gray-200 rounded-xl">
+    <h3 class="text-2xl font-bold text-center mb-8">Похожие автомобили</h3>
+    <div class="grid grid-cols-3 gap-3">
+        {% for car in related_cars %}
+        <a href="{% url 'car:detail' car.id %}" class="hover:shadow-2xl">
+            <div class="">
+                <img src="{{ car.image.url }}" alt="{{car.image.url }}" class="rounded-t-xl">
+            </div>
+            <div class="p-6 bg-white rounded-b-xl">
+                <h2 class="text-2xl">{{car.brand}} {{car.model}}</h2>
+                <p class="text-gray-500">Price: ${{car.price}}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
