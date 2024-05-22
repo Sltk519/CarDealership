@@ -82,6 +82,20 @@ DATABASES = {
     }
 }
 
+# settings.py
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'cardealership',  # Replace with your actual database name
+#         'USER': 'root',  # Replace with your database username
+#         'PASSWORD': '58122363',  # Replace with your database password
+#         'HOST': 'localhost',  # Use 'localhost' if your MySQL server is on the same machine
+#         'PORT': '3306',  # Default MySQL port
+#     }
+# }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
