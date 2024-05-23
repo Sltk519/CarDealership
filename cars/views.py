@@ -1,10 +1,9 @@
 from django.shortcuts import render,get_object_or_404,redirect,get_list_or_404
 from .models import Car,Review,Order
-from core.models import Favorite
-from .forms import FilterCarForm,ReviewForm
+
+from .forms import FilterCarForm,ReviewForm,OrderForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-
 
 
 def car_list(request):
@@ -44,9 +43,7 @@ def detail(request,id):
     related_cars=Car.objects.filter(category=car.category,is_sold=False,).exclude(id=car.id)[0:6]
     return render(request,"cars/detail.html",{"car":car,"related_cars":related_cars,'reviews':reviews,"searchCar":searchCar})
 
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
-from .models import Car
+
 
 def compare_cars(request, id):
     car1 = get_object_or_404(Car, pk=id)
@@ -100,15 +97,29 @@ def updatereview(request,id):
                           'cars/updatereview.html',
                           {'form':ReviewForm(),'error':'bad data passed in'})
 @login_required
-def createorder(request,id):
-    car = get_object_or_404(Car, pk=id)
-    order=Order.objects.create(car=car,user=request.user)
-    return redirect('car:detail',car.id)
+def create_order(request,id):
+    car=get_object_or_404(Car,pk=id)
+    if request.method == 'POST':
+        form = OrderForm(request.POST, user=request.user)
+        if form.is_valid():
+            # Update user's first and last name
+            request.user.first_name = form.cleaned_data['first_name']
+            request.user.last_name = form.cleaned_data['last_name']
+            request.user.save()
+            
+            order = form.save(commit=False)
+            order.user = request.user
+            order.car = car
+            order.save()
+            return redirect('core:dashboard',request.user)  # Redirect to a success page or the list of orders
+    else:
+        form = OrderForm(user=request.user)
+    return render(request, 'cars/order.html', {'form': form})
 
 @login_required
 def deleteorder(request,id):
     order = get_object_or_404(Order, pk=id,user=request.user)
     order.delete()
-    return redirect('car:detail',order.car.id)
+    return redirect('core:dashboard',request.user)
     
     

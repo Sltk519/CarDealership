@@ -1,14 +1,6 @@
 from django.contrib import admin
 from .models import Car, Category, CarDetail,Review,Order
 
-# admin.site.register(Car)
-
-# admin.site.register(CarDetail)
-# admin.site.register(Category)
-
-from django.db import models
-from django.utils.translation import gettext_lazy as _
-
 # Import your models (assuming they're in the same file)
 from .models import Category, Car, CarDetail
 

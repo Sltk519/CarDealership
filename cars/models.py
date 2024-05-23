@@ -25,9 +25,6 @@ class Car(models.Model):
     width = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
     category=models.ForeignKey(Category, on_delete=models.CASCADE,blank=True,null=True,related_name= 'car')
 
-    # In your Car model
-    def is_favorited_by(self, user):
-        return self.favorite_set.filter(user=user).exists()
     def __str__(self):
         return f"{self.brand} {self.model}({self.year})"
     

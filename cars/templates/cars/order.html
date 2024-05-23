@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% block title %}Оформить заказ{% endblock %}
+{% block content %}
+
+
+<div class="bg-gray-100">
+    <div class="max-w-md mx-auto mt-10">
+        <h1 class="text-2xl font-bold mb-4">Create Order</h1>
+        <form method="post" class="bg-white p-6 rounded-lg shadow-lg">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700">First Name</label>
+                {{ form.first_name }}
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Last Name</label>
+                {{ form.last_name }}
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">Quantity</label>
+                {{ form.quantity }}
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -63,12 +63,19 @@ class ReviewForm(forms.ModelForm):
 
 
 class OrderForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    last_name = forms.CharField(max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    
     class Meta:
-        model=Order
-        fields=['user','car','quantity']
-        widgets={
-            "user":forms.TextInput(attrs={'class':"mx-auto"}),
-            "car":forms.TextInput(attrs={'class':"mx-auto"}),
-            "quantity":forms.TextInput(attrs={'class':"mx-auto"}),
-            
+        model = Order
+        fields = ['quantity']
+        widgets = {
+            'quantity': forms.NumberInput(attrs={'class': 'form-input'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(OrderForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['first_name'].initial = user.first_name
+            self.fields['last_name'].initial = user.last_name

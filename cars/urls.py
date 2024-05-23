@@ -9,6 +9,6 @@ urlpatterns = [
     path("createreview/<int:id>/",views.createreview,name="createreview"),
     path("deletereview/<int:id>/",views.deletereview,name="deletereview"),
     path("updatetereview/<int:id>/",views.updatereview,name="updatereview"),
-    path("order/<int:id>/",views.createorder,name="order"),
+    path("order/<int:id>/",views.create_order,name="order"),
     path("deleteorder/<int:id>/",views.deleteorder,name="deleteorder")
 ]
